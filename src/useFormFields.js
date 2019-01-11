@@ -46,13 +46,14 @@ export default function useFormFields(
         return state.map(i => (i.name === updatedItem.name ? updatedItem : i));
       }
       case 'pushErrors': {
-        return action.payload;
+        return cloneDeep(action.payload);
       }
       case 'resetFields': {
         return cloneDeep(initialValues);
       }
-      default:
-        return null;
+      default: {
+        return state;
+      }
     }
   }, cloneDeep(initialValues));
 
