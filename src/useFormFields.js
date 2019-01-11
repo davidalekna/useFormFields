@@ -38,12 +38,13 @@ export default function useFormFields(
   const [state, dispatch] = useReducer((state, action) => {
     switch (action.type) {
       case 'fieldUpdate': {
-        const item = state.find(({ name }) => name === action.payload.name);
-        const updatedItem = {
-          ...item,
-          ...action.payload,
-        };
-        return state.map(i => (i.name === updatedItem.name ? updatedItem : i));
+        let itemIndex;
+        const item = state.find(({ name }, index) => {
+          itemIndex = index;
+          return name === action.payload.name;
+        });
+        state[itemIndex] = Object.assign(item, action.payload);
+        return state;
       }
       case 'pushErrors': {
         return cloneDeep(action.payload);
