@@ -44,7 +44,7 @@ export default function useFormFields(
           return name === action.payload.name;
         });
         state[itemIndex] = Object.assign(item, action.payload);
-        return state;
+        return cloneDeep(state);
       }
       case 'pushErrors': {
         return cloneDeep(action.payload);
