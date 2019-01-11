@@ -1,5 +1,5 @@
-import { useReducer } from "react";
-import cloneDeep from "lodash.clonedeep";
+import { useReducer } from 'react';
+import { cloneDeep } from 'lodash';
 
 const errorPusher = field => {
   if (field.requirements) {
@@ -24,7 +24,7 @@ const defaultFieldValidation = (state, updateState) => {
       .flat()
       .filter(Boolean).length > 0
   ) {
-    alert("fix your errors please!");
+    alert('fix your errors please!');
     return undefined;
   } else {
     return validatedState;
@@ -33,11 +33,11 @@ const defaultFieldValidation = (state, updateState) => {
 
 export default function useFormFields(
   initialValues = [],
-  validate = defaultFieldValidation
+  validate = defaultFieldValidation,
 ) {
   const [state, updateState] = useReducer(
     (state, newState) => newState,
-    cloneDeep(initialValues)
+    cloneDeep(initialValues),
   );
 
   const mergeState = (newItemKey, newItem) => {
@@ -45,16 +45,16 @@ export default function useFormFields(
   };
 
   const handleChange = ({ target }) => {
-    if (!target.name) throw Error("no input name");
+    if (!target.name) throw Error('no input name');
     const item = state.find(item => item.name === target.name);
     const updatedItem = Object.assign(item, {
-      value: target.type === "checkbox" ? target.checked : target.value
+      value: target.type === 'checkbox' ? target.checked : target.value,
     });
     mergeState(target.name, updatedItem);
   };
 
   const validateOnBlur = ({ target }) => {
-    if (!target.name) throw Error("no input name");
+    if (!target.name) throw Error('no input name');
     const item = state.find(item => item.name === target.name);
     const updatedItem = errorPusher(item);
     mergeState(target.name, updatedItem);
@@ -64,7 +64,7 @@ export default function useFormFields(
     updateState(
       initialValues.map(fld => {
         return { ...fld, errors: [] };
-      })
+      }),
     );
   };
 

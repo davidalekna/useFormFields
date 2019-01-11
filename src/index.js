@@ -1,15 +1,16 @@
-import React, { memo } from "react";
-import ReactDOM from "react-dom";
-import initialFields from "./fields";
-import useFormFields from "./useFormFields";
-import "./styles.css";
+import React, { memo } from 'react';
+import ReactDOM from 'react-dom';
+import { isEqual } from 'lodash';
+import initialFields from './fields';
+import useFormFields from './useFormFields';
+import './styles.css';
 
 function renderFieldErrors(errors) {
   return (
     errors && (
       <ul>
         {errors.map((err, key) => (
-          <li key={key} style={{ color: "violet" }}>
+          <li key={key} style={{ color: 'violet' }}>
             {err}
           </li>
         ))}
@@ -20,7 +21,7 @@ function renderFieldErrors(errors) {
 
 const FieldContainer = memo(
   ({ component: Field, ...props }) => {
-    console.log("rendering", props.name);
+    console.log('rendering', props.name);
     return (
       <label key={props.name}>
         <div>{props.label}</div>
@@ -39,15 +40,8 @@ const FieldContainer = memo(
   },
   (
     { value: prevValue, errors: prevErrors = [] },
-    { value: nextValue, errors: nextErrors = [] }
-  ) => {
-    // TODO: should render the errors on blur...
-    // console.log('prev',prevErrors)
-    // console.log('next',nextErrors);
-    if (prevValue === nextValue) {
-      return true;
-    }
-  }
+    { value: nextValue, errors: nextErrors = [] },
+  ) => isEqual([prevValue, prevErrors], [nextValue, nextErrors]),
 );
 
 function App() {
@@ -56,7 +50,7 @@ function App() {
     handleChange,
     submit,
     validateOnBlur,
-    clearValues
+    clearValues,
   ] = useFormFields(initialFields);
 
   const handleSubmit = evt => {
@@ -74,7 +68,7 @@ function App() {
               key: field.name,
               validateOnBlur,
               handleChange,
-              ...field
+              ...field,
             }}
           />
         ))}
@@ -88,5 +82,5 @@ function App() {
   );
 }
 
-const rootElement = document.getElementById("root");
+const rootElement = document.getElementById('root');
 ReactDOM.render(<App />, rootElement);
